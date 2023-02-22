@@ -20,11 +20,11 @@ epochs = args.epochs
 class Net(nn.Module):
     def __init__(self, input_size):
         super(Net, self).__init__()
-        self.shared_layer = nn.Linear(input_size, 256)
-        self.month_shared_layer = nn.Linear(256, 128)
-        self.time_shared_layer = nn.Linear(256, 128)
-        self.time_layer1 = nn.ModuleList([nn.Linear(128, 128) for _ in range(6)])
-        self.month_layer1 = nn.ModuleList([nn.Linear(128, 128) for _ in range(12)])
+        #self.shared_layer = nn.Linear(input_size, 256)
+        #self.month_shared_layer = nn.Linear(32, 128)
+        #self.time_shared_layer = nn.Linear(32, 128)
+        self.time_layer1 = nn.ModuleList([nn.Linear(input_size, 128) for _ in range(6)])
+        self.month_layer1 = nn.ModuleList([nn.Linear(input_size, 128) for _ in range(12)])
         self.time_layer2 = nn.ModuleList([nn.Linear(128, 1) for _ in range(6)])
         self.month_layer2 = nn.ModuleList([nn.Linear(128, 1) for _ in range(12)])
         
@@ -32,19 +32,19 @@ class Net(nn.Module):
         self.sigmoid = nn.Sigmoid()
 
     def forward(self, x):
-        x = self.activation(self.shared_layer(x))
-        x_month = self.activation(self.month_shared_layer(x))
-        x_time = self.activation(self.time_shared_layer(x))
+        #x = self.activation(self.shared_layer(x))
+        #x_month = self.activation(self.month_shared_layer(x))
+        #x_time = self.activation(self.time_shared_layer(x))
         
         time_out_list = []
         month_out_list = []
         
         for layer in self.time_layer1:
-            out = layer(x_time)
+            out = layer(x)
             time_out_list.append(self.activation(out))
         
         for layer in self.month_layer1:
-            out = layer(x_month)
+            out = layer(x)
             month_out_list.append(self.activation(out))
         
         time_final_pred = []
